@@ -1,0 +1,7 @@
+.clock-item {
+    background-color: whitesmoke;
+    height: 300px;
+    width: 300px;
+    margin: 10px;
+    position: relative;
+}
