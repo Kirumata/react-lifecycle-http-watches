@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import './App.css'
-import ClockHandler from './components/ClockHandler/ClockHandler';
 import InputForm from './components/InputForm/InputForm';
 import { ClockProperties } from './types';
 import ClockPanel from './components/ClockPanel/ClockPanel';
@@ -11,43 +10,49 @@ function App() {
 
   const clocks: ClockProperties[] = [
     {
-      id: "1",
+      id: 1,
       name: "London",
       timezone: -3,
     },
 
     {
-      id: "2",
+      id: 2,
       name: "Moscow",
       timezone: +3,
     },
 
     {
-      id: "3",
+      id: 3,
       name: "Sydney",
       timezone: +8,
     },
 
   ];
 
-  const [formState, setFormState] = useState<ClockProperties>({ id: "", name: "", timezone: 0 });
+  const [formState, setFormState] = useState<ClockProperties>({ id: -1, name: "", timezone: 0 });
   const [clocksList, setClocksList] = useState<ClockProperties[]>(clocks);
 
 
-  function submit(e) {
-    setClocksList([...clocksList, formState]);
+  function submit(e: React.FormEvent) {
+    let newId: number = clocksList.length > 0 ? clocksList[clocksList.length - 1].id + 1 : 0;
+    let newClock: ClockProperties = {
+      id: newId,
+      name: formState.name,
+      timezone: formState.timezone,
+    }
+    setClocksList([...clocksList, newClock]);
     e.preventDefault();
   }
 
-  const change = ({ target }) => {
-    const { name, value } = target;
+  function change(e: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
     setFormState(prevForm => ({ ...prevForm, [name]: value }));
-  }
+  };
 
-  function deleteClock(e: string) {
+  const deleteClock = (id: number) => {
     let array: ClockProperties[] = [...clocksList];
     for (var i = 0; i < array.length; i++) {
-      if (array[i].id == e) {
+      if (array[i].id == id) {
         array.splice(i, 1);
       }
     }
@@ -55,12 +60,8 @@ function App() {
   }
   return (
     <>
-      <InputForm {...{
-        handleSubmit: (e) => submit(e),
-        handleChange: (e) => change(e)
-      }}></InputForm>
-
-      <ClockPanel clocks={clocksList} handleDelete={(e) => deleteClock(e)} />
+      <InputForm handleSubmit={submit} handleChange={change}></InputForm >
+      <ClockPanel clocks={clocksList} handleDelete={deleteClock} />
     </>
   )
 }

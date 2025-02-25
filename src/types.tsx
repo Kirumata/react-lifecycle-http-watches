@@ -1,5 +1,5 @@
 export interface ClockProperties {
-    id: string,
+    id: number,
     name: string,
     timezone: number;
 }

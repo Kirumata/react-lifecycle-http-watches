@@ -4,7 +4,7 @@ import "./ClockPanel.css"
 
 export default function ClockPanel({ clocks, handleDelete }: { 
     clocks: ClockProperties[],
-    handleDelete: (clockId : string) => void
+    handleDelete: (clockId : number) => void
  }) {
     return (
         <div className='clock-panel'>
